@@ -22,8 +22,10 @@ public class Main extends Application {
         Parent root = loader.load();
         Controller controller = loader.getController();
 
-        //Draws buttons on the board
+        //Draws detailed buttons on the board and stores buttons in
         controller.drawboard(length, heigth);
+
+
 
         primaryStage.setScene(new Scene(root, 300, 275));
 
