@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 public class DetailedButton extends Button {
     /**
      * Extends button istället för att innehålla button
-      */
+     */
     //private Button button;
     //bomb: -1
     //0-8: neighbor bombs.
@@ -27,7 +27,6 @@ public class DetailedButton extends Button {
     /*public Button getButton() {
         return button;
     }*/
-
     public byte getStatus() {
         return status;
     }

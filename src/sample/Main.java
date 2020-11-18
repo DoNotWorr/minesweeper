@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Minesweeper");
 
         //Number of buttons on X- and Y-axis
@@ -24,7 +24,6 @@ public class Main extends Application {
 
         //Draws detailed buttons on the board and stores buttons in
         controller.drawboard(length, heigth);
-
 
 
         primaryStage.setScene(new Scene(root, 300, 275));

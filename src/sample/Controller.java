@@ -20,6 +20,7 @@ public class Controller {
 
     /**
      * Draws a board of buttons in layout.
+     *
      * @param length number of buttons on X-axis
      * @param heigth number of buttons on Y-axis
      */
@@ -32,8 +33,8 @@ public class Controller {
         };
 
         matrix = new DetailedButton[length][heigth];
-        for(byte x = 0; x < length; x++) {
-            for(byte y = 0; y < heigth; y++) {
+        for (byte x = 0; x < length; x++) {
+            for (byte y = 0; y < heigth; y++) {
                 //DetailedButton extends Button, but adds more information (see class)
                 DetailedButton currentDetailedButton = new DetailedButton(x, y);
 
