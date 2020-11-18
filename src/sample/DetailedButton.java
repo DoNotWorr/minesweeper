@@ -31,6 +31,15 @@ public class DetailedButton extends Button {
         return status;
     }
 
+    public boolean incrementStatus() {
+        if(this.status < 0) {
+            return false;
+        } else {
+            status++;
+            return true;
+        }
+    }
+
     public byte getPosX() {
         return posX;
     }
