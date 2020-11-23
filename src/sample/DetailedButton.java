@@ -10,11 +10,11 @@ public class DetailedButton extends Button {
     //private Button button;
     //bomb: -1
     //0-8: neighbor bombs.
-    private byte status;
-    private byte posX;
-    private byte posY;
+    private int status;
+    private int posX;
+    private int posY;
 
-    public DetailedButton(byte posX, byte posY) {
+    public DetailedButton(int posX, int posY) {
         //this.button = new Button();
         this.status = 0;
         this.posX = posX;
@@ -27,24 +27,28 @@ public class DetailedButton extends Button {
     /*public Button getButton() {
         return button;
     }*/
-    public byte getStatus() {
+    public int getStatus() {
         return status;
     }
 
+    public void setBomb() {
+        this.status = -1;
+    }
+
     public boolean incrementStatus() {
-        if(this.status < 0) {
+        if (this.status < 0) {
             return false;
         } else {
-            status++;
+            this.status++;
             return true;
         }
     }
 
-    public byte getPosX() {
+    public int getPosX() {
         return posX;
     }
 
-    public byte getPosY() {
+    public int getPosY() {
         return posY;
     }
 }
