@@ -1,6 +1,7 @@
 package sample;
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -11,7 +12,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.function.Consumer;
 
 public class Controller {
 
@@ -41,11 +42,7 @@ public class Controller {
      */
     private void addButtons(int length, int heigth) {
         //Create event for buttons
-        EventHandler<ActionEvent> click = event -> {
-            DetailedButton currentDetailedButton = (DetailedButton) event.getSource();
-            //todo: placeholder for method when button is clicked
-            System.out.println("Pos: (" + currentDetailedButton.getPosX() + "," + currentDetailedButton.getPosY() + "), status: " + currentDetailedButton.getStatus());
-        };
+        EventHandler<ActionEvent> click = event -> clickButton(length, heigth, (DetailedButton) event.getSource(), new ArrayList<>());
 
         matrix = new DetailedButton[length][heigth];
         for (int x = 0; x < length; x++) {
@@ -107,7 +104,8 @@ public class Controller {
             matrix[xPos][yPos].setBomb();
 
             try {
-                runMethodOnNeighbors(xPos, yPos, length - 1, heigth - 1, DetailedButton.class.getMethod("incrementStatus"));
+                List<DetailedButton> list = runMethodOnNeighbors(xPos, yPos, length - 1, heigth - 1);
+                list.forEach(DetailedButton::incrementStatus);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -120,14 +118,13 @@ public class Controller {
      * @param yPos y-coordinate of target button
      * @param xMaxPos the biggest x-coordinate on the board
      * @param yMaxPos the biggest y-coordinate on the board
-     * @param method a method to run on all found neighbor buttons
-     * @throws IllegalAccessException see method.invoke
-     * @throws IllegalArgumentException see method.invoke
-     * @throws InvocationTargetException see method.invoke
-     * @throws NullPointerException see method.invoke
-     * @throws ExceptionInInitializerError see method.invoke
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     * @throws NullPointerException
+     * @throws ExceptionInInitializerError
      */
-    private void runMethodOnNeighbors(int xPos, int yPos, int xMaxPos, int yMaxPos, Method method) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NullPointerException, ExceptionInInitializerError {
+    private List<DetailedButton> runMethodOnNeighbors(int xPos, int yPos, int xMaxPos, int yMaxPos) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NullPointerException, ExceptionInInitializerError {
 /*
          Det finns 9 olika fall att kontrollera.
 
@@ -147,69 +144,95 @@ public class Controller {
          X * 0	0 * 0	0 * X
          X X X	X X X	X X X
 */
+        List<DetailedButton> result = new ArrayList<>();
         if (xPos == 0) {                    //Alla fall på vänster sida
             if (yPos == 0) {                //1. NW
                 xPos++;
-                method.invoke(matrix[xPos][yPos++]);
-                method.invoke(matrix[xPos--][yPos]);
-                method.invoke(matrix[xPos][yPos]);
+                result.add(matrix[xPos][yPos++]);
+                result.add(matrix[xPos--][yPos]);
+                result.add(matrix[xPos][yPos]);
             } else if (yPos == yMaxPos) {   //2. SW
                 yPos--;
-                method.invoke(matrix[xPos++][yPos]);
-                method.invoke(matrix[xPos][yPos++]);
-                method.invoke(matrix[xPos][yPos]);
+                result.add(matrix[xPos++][yPos]);
+                result.add(matrix[xPos][yPos++]);
+                result.add(matrix[xPos][yPos]);
             } else {                        //3. W
                 yPos--;
-                method.invoke(matrix[xPos++][yPos]);
-                method.invoke(matrix[xPos][yPos++]);
-                method.invoke(matrix[xPos][yPos++]);
-                method.invoke(matrix[xPos--][yPos]);
-                method.invoke(matrix[xPos][yPos]);
+                result.add(matrix[xPos++][yPos]);
+                result.add(matrix[xPos][yPos++]);
+                result.add(matrix[xPos][yPos++]);
+                result.add(matrix[xPos--][yPos]);
+                result.add(matrix[xPos][yPos]);
             }
         } else if (xPos == xMaxPos) {       //Alla fall på höger sida
             if (yPos == 0) {                //4. NE
                 yPos++;
-                method.invoke(matrix[xPos--][yPos]);
-                method.invoke(matrix[xPos][yPos--]);
-                method.invoke(matrix[xPos][yPos]);
+                result.add(matrix[xPos--][yPos]);
+                result.add(matrix[xPos][yPos--]);
+                result.add(matrix[xPos][yPos]);
             } else if (yPos == yMaxPos) {   //5. SE
                 xPos--;
-                method.invoke(matrix[xPos][yPos--]);
-                method.invoke(matrix[xPos++][yPos]);
-                method.invoke(matrix[xPos][yPos]);
+                result.add(matrix[xPos][yPos--]);
+                result.add(matrix[xPos++][yPos]);
+                result.add(matrix[xPos][yPos]);
             } else {                        //6. E
                 yPos++;
-                method.invoke(matrix[xPos--][yPos]);
-                method.invoke(matrix[xPos][yPos--]);
-                method.invoke(matrix[xPos][yPos--]);
-                method.invoke(matrix[xPos++][yPos]);
-                method.invoke(matrix[xPos][yPos]);
+                result.add(matrix[xPos--][yPos]);
+                result.add(matrix[xPos][yPos--]);
+                result.add(matrix[xPos][yPos--]);
+                result.add(matrix[xPos++][yPos]);
+                result.add(matrix[xPos][yPos]);
             }
         } else if (yPos == 0) {             //7. Överkant, men inte ett hörn
             xPos++;
-            method.invoke(matrix[xPos][yPos++]);
-            method.invoke(matrix[xPos--][yPos]);
-            method.invoke(matrix[xPos--][yPos]);
-            method.invoke(matrix[xPos][yPos--]);
-            method.invoke(matrix[xPos][yPos]);
+            result.add(matrix[xPos][yPos++]);
+            result.add(matrix[xPos--][yPos]);
+            result.add(matrix[xPos--][yPos]);
+            result.add(matrix[xPos][yPos--]);
+            result.add(matrix[xPos][yPos]);
         } else if (yPos == yMaxPos) {       //8. Underkant, men inte ett hörn
             xPos--;
-            method.invoke(matrix[xPos][yPos--]);
-            method.invoke(matrix[xPos++][yPos]);
-            method.invoke(matrix[xPos++][yPos]);
-            method.invoke(matrix[xPos][yPos++]);
-            method.invoke(matrix[xPos][yPos]);
+            result.add(matrix[xPos][yPos--]);
+            result.add(matrix[xPos++][yPos]);
+            result.add(matrix[xPos++][yPos]);
+            result.add(matrix[xPos][yPos++]);
+            result.add(matrix[xPos][yPos]);
         } else {                            //9. Någonstans i mitten
             xPos--;
-            method.invoke(matrix[xPos][yPos--]);
-            method.invoke(matrix[xPos++][yPos]);
-            method.invoke(matrix[xPos++][yPos]);
-            method.invoke(matrix[xPos][yPos++]);
-            method.invoke(matrix[xPos][yPos++]);
-            method.invoke(matrix[xPos--][yPos]);
-            method.invoke(matrix[xPos--][yPos]);
-            method.invoke(matrix[xPos][yPos]);
+            result.add(matrix[xPos][yPos--]);
+            result.add(matrix[xPos++][yPos]);
+            result.add(matrix[xPos++][yPos]);
+            result.add(matrix[xPos][yPos++]);
+            result.add(matrix[xPos][yPos++]);
+            result.add(matrix[xPos--][yPos]);
+            result.add(matrix[xPos--][yPos]);
+            result.add(matrix[xPos][yPos]);
         }
+        return result;
+    }
+
+    private void clickButton(int length, int heigth, DetailedButton currentDetailedButton, List<String> clickedButtons) {
+        //todo boolean isPressed in DetailedButton
+        if (currentDetailedButton.getText().isEmpty()) {
+            if(currentDetailedButton.getStatus() == -1) {
+                System.out.println("Du förlorade"); //todo remove test sout
+            } else if (currentDetailedButton.getStatus() == 0) {
+                try {
+                    List<DetailedButton> list = runMethodOnNeighbors(currentDetailedButton.getPosX(), currentDetailedButton.getPosY(), length - 1, heigth - 1);
+                    list.forEach(button -> {
+                        if (!clickedButtons.contains(button.getButtonId())) {
+                            clickedButtons.add(currentDetailedButton.getButtonId());
+                            clickButton(length, heigth, button, clickedButtons);
+
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        currentDetailedButton.setText(String.valueOf(currentDetailedButton.getStatus()));
+        //System.out.println("Pos: (" + currentDetailedButton.getPosX() + "," + currentDetailedButton.getPosY() + "), status: " + currentDetailedButton.getStatus()); //todo remove test sout
     }
 }
 

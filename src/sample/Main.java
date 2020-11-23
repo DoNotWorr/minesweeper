@@ -24,8 +24,6 @@ public class Main extends Application {
         Parent root = loader.load();
         Controller controller = loader.getController();
 
-        testXYcoordinates(length, heigth);
-
         //Draws detailed buttons on the board and stores buttons in
         controller.drawboard(length, heigth, bombQuantity);
 
