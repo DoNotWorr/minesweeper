@@ -17,6 +17,7 @@ public class DetailedButton extends Button {
     public DetailedButton(int posX, int posY) {
         //this.button = new Button();
         this.status = 0;
+        this.setText("0");
         this.posX = posX;
         this.posY = posY;
     }
@@ -33,6 +34,7 @@ public class DetailedButton extends Button {
 
     public void setBomb() {
         this.status = -1;
+        this.setText("B");
     }
 
     public boolean incrementStatus() {
@@ -40,6 +42,7 @@ public class DetailedButton extends Button {
             return false;
         } else {
             this.status++;
+            this.setText(String.valueOf(this.status));
             return true;
         }
     }
