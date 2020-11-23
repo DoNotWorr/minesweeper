@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 public class DetailedButton extends Button {
@@ -13,7 +12,7 @@ public class DetailedButton extends Button {
     private int status;
     private int posX;
     private int posY;
-    private String buttonId;
+    private String buttonId; //todo boolean isClicked instead of buttonID?
 
     public DetailedButton(int posX, int posY) {
         //this.button = new Button();
