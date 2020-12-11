@@ -15,12 +15,23 @@ public class DetailedButton extends Button {
     private String buttonId; //todo boolean isClicked instead of buttonID?
 
     public DetailedButton(int posX, int posY) {
-        //this.button = new Button();
         this.status = 0;
-        //this.setText("0"); //todo remove test
         this.posX = posX;
         this.posY = posY;
         this.buttonId = posX+","+posY;
+
+        this.setId("button");
+
+        //Button design
+        this.setPrefWidth(30.0);
+        this.setMinWidth(30.0);
+        this.setMaxWidth(30.0);
+
+        this.setPrefHeight(30.0);
+        this.setPrefHeight(30.0);
+        this.setMaxHeight(30.0);
+
+        //this.getStylesheets().add("style.css");
     }
 
     public int getStatus() {

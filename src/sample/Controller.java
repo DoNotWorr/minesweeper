@@ -23,6 +23,8 @@ public class Controller {
     //Buttons are stored in 2D array
     DetailedButton[][] matrix;
 
+    int uncoveredButtons;
+
     /**
      * Draws a board of buttons, generates the desired amount of bombs in random positions. The buttons are saved in instance-variable matrix[][]
      *
@@ -55,6 +57,8 @@ public class Controller {
 
                 //Add to matrix
                 matrix[x][y] = currentDetailedButton;
+
+
 
                 //Add the button to board
                 board.add(currentDetailedButton, x, y);
@@ -223,7 +227,6 @@ public class Controller {
                         if (!clickedButtons.contains(button.getButtonId())) {
                             clickedButtons.add(currentDetailedButton.getButtonId());
                             clickButton(length, heigth, button, clickedButtons);
-
                         }
                     });
                 } catch (Exception e) {

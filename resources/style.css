@@ -1,0 +1,19 @@
+#button {
+    -fx-background-color: #9b7653;
+
+    -fx-background-insets: 1,1,1;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+}
+
+#clicked-button {
+    -fx-background-color: #7c5e42;
+    -fx-background-insets: 1,1,1;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+}
+
+#board {
+    -fx-background-color: #7c5e42;
+}
+
