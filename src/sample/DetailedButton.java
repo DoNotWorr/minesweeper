@@ -20,18 +20,7 @@ public class DetailedButton extends Button {
         this.posY = posY;
         this.buttonId = posX+","+posY;
 
-        this.setId("button");
-
-        //Button design
-        this.setPrefWidth(30.0);
-        this.setMinWidth(30.0);
-        this.setMaxWidth(30.0);
-
-        this.setPrefHeight(30.0);
-        this.setPrefHeight(30.0);
-        this.setMaxHeight(30.0);
-
-        //this.getStylesheets().add("style.css");
+        this.getStyleClass().add("button");
     }
 
     public int getStatus() {
@@ -40,7 +29,6 @@ public class DetailedButton extends Button {
 
     public void setBomb() {
         this.status = -1;
-        //this.setText("B"); //todo remove test
     }
 
     public boolean incrementStatus() {
@@ -48,13 +36,8 @@ public class DetailedButton extends Button {
             return false;
         } else {
             this.status++;
-            //this.setText(String.valueOf(this.status)); //todo remove test
             return true;
         }
-    }
-
-    public void click() {
-
     }
 
     public int getPosX() {

@@ -1,18 +1,15 @@
 package sample;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
 
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class Controller {
 
@@ -39,6 +36,7 @@ public class Controller {
 
     /**
      * Draws buttons and assigns click-method
+     *
      * @param length number of buttons on x-axis
      * @param heigth number of buttons on y-axis
      */
@@ -59,7 +57,6 @@ public class Controller {
                 matrix[x][y] = currentDetailedButton;
 
 
-
                 //Add the button to board
                 board.add(currentDetailedButton, x, y);
             }
@@ -68,7 +65,8 @@ public class Controller {
 
     /**
      * Randomizes a unique index for each bomb
-     * @param bombQuantity number of bombs
+     *
+     * @param bombQuantity       number of bombs
      * @param buttonIndexBoundry the biggest index for the board. For example, a board of 3 by 3 buttons has a one-dimensional index from 0 to 8, which makes the biggest index: 8.
      * @return a list of indexes where bombs should be placed
      */
@@ -89,15 +87,15 @@ public class Controller {
     /**
      * Turns one-dimensional index of bombs into two dimensional index, where (0,0) is top left and (length-1, heigth-1) is bottom right.
      * This method sets the status -1 (symbolizes a bomb) on requested indexes.
-     *
+     * <p>
      * The following example board with <B>length: 3</B> and <B>height: 3</B> visualizes the one-dimensional index in two dimensions.
      * 0 3 6
      * 1 4 7
      * 2 5 8
-     * @param bombIndexes which indexes should be a bomb
-     * @param length number of buttons on x-axis
-     * @param heigth number of buttons on y-axis
      *
+     * @param bombIndexes which indexes should be a bomb
+     * @param length      number of buttons on x-axis
+     * @param heigth      number of buttons on y-axis
      */
     private void addBombs(List<Integer> bombIndexes, int length, int heigth) {
         bombIndexes.forEach(bomb -> {
@@ -108,7 +106,7 @@ public class Controller {
             matrix[xPos][yPos].setBomb();
 
             try {
-                List<DetailedButton> list = runMethodOnNeighbors(xPos, yPos, length - 1, heigth - 1);
+                List<DetailedButton> list = getNeighbors(xPos, yPos, length - 1, heigth - 1);
                 list.forEach(DetailedButton::incrementStatus);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -118,8 +116,9 @@ public class Controller {
 
     /**
      * Finds all neighbors of a target button and runs a method on neighbor buttons
-     * @param xPos x-coordinate of target button
-     * @param yPos y-coordinate of target button
+     *
+     * @param xPos    x-coordinate of target button
+     * @param yPos    y-coordinate of target button
      * @param xMaxPos the biggest x-coordinate on the board
      * @param yMaxPos the biggest y-coordinate on the board
      * @throws IllegalAccessException
@@ -128,7 +127,7 @@ public class Controller {
      * @throws NullPointerException
      * @throws ExceptionInInitializerError
      */
-    private List<DetailedButton> runMethodOnNeighbors(int xPos, int yPos, int xMaxPos, int yMaxPos) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NullPointerException, ExceptionInInitializerError {
+    private List<DetailedButton> getNeighbors(int xPos, int yPos, int xMaxPos, int yMaxPos) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NullPointerException, ExceptionInInitializerError {
 /*
          Det finns 9 olika fall att kontrollera.
 
@@ -216,14 +215,15 @@ public class Controller {
     }
 
     private void clickButton(int length, int heigth, DetailedButton currentDetailedButton, List<String> clickedButtons) {
-        //todo boolean isPressed in DetailedButton
+        //Checks if button has been clicked yet
         if (currentDetailedButton.getText().isEmpty()) {
-            if(currentDetailedButton.getStatus() == -1) {
-                System.out.println("Du förlorade"); //todo remove test sout
+            //Checks if content is a bomb
+            if (currentDetailedButton.getStatus() == -1) {
+                System.out.println("Du förlorade"); //todo replace with losing
             } else if (currentDetailedButton.getStatus() == 0) {
                 try {
-                    List<DetailedButton> list = runMethodOnNeighbors(currentDetailedButton.getPosX(), currentDetailedButton.getPosY(), length - 1, heigth - 1);
-                    list.forEach(button -> {
+                    List<DetailedButton> neighbors = getNeighbors(currentDetailedButton.getPosX(), currentDetailedButton.getPosY(), length - 1, heigth - 1);
+                    neighbors.forEach(button -> {
                         if (!clickedButtons.contains(button.getButtonId())) {
                             clickedButtons.add(currentDetailedButton.getButtonId());
                             clickButton(length, heigth, button, clickedButtons);
@@ -235,7 +235,6 @@ public class Controller {
             }
         }
         currentDetailedButton.setText(String.valueOf(currentDetailedButton.getStatus()));
-        //System.out.println("Pos: (" + currentDetailedButton.getPosX() + "," + currentDetailedButton.getPosY() + "), status: " + currentDetailedButton.getStatus()); //todo remove test sout
     }
 }
 
