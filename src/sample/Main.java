@@ -1,9 +1,6 @@
 package sample;
 
-import com.sun.xml.internal.bind.v2.runtime.output.StAXExStreamWriterOutput;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,8 +24,11 @@ public class Main extends Application {
         //Draws detailed buttons on the board and stores buttons in
         controller.drawboard(length, heigth, bombQuantity);
 
-        primaryStage.setScene(new Scene(root, 300, 275));
+        Scene scene = new Scene(root, 300, 275);
+        //CSS to style buttons etc
+        scene.getStylesheets().add("style.css");
 
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

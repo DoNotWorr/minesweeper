@@ -1,0 +1,33 @@
+.button {
+    -fx-background-color: #9b7653;
+
+    -fx-background-insets: 1,1,1;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+
+    -fx-pref-height: 30.0;
+    -fx-min-height: 30.0;
+    -fx-max-height: 30.0;
+
+    -fx-pref-width: 30.0;
+    -fx-min-width: 30.0;
+    -fx-max-width: 30.0;
+}
+
+#board {
+    -fx-background-color: #7c5e42;
+}
+
+#bomb {
+     -fx-background-color: #FF0000;
+}
+
+#clicked-button {
+    -fx-background-color: #7c5e42;
+    -fx-background-insets: 1,1,1;
+    -fx-background-radius: 2;
+    -fx-font-weight: bold;
+}
+
+
+
